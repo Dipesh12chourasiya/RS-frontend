@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return <div className='h-[80vh]  flex items-center justify-center'  style={{
@@ -12,7 +13,7 @@ const Hero = () => {
             High-performing products that keep large turf areas beautiful and healthy-while saving you time, water and energy.
         </p>
         <div className='mt-8'>
-        <button className='text-orange-100 text-xl lg:text-2xl font-semibold border hover:bg-orange-500 px-10 py-3 hover:bg-ornage-100 rounded-full'>Discover Equipment</button>
+        <Link to="/all-equipments" className='text-orange-100 text-xl lg:text-2xl font-semibold border hover:bg-orange-500 px-10 py-3 hover:bg-ornage-100 rounded-full'>Discover Equipment</Link>
         </div>
 
     </div>
