@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/editedLogo.png";
 import { IoMenu } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import auth from "../../store/auth";
+
 
 const Navbar = () => {
   const links = [
@@ -22,13 +25,17 @@ const Navbar = () => {
       link: "/profile",
     },
   ];
+  const  isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+  if(isLoggedIn===false){
+    links.splice(2,2)
+  }
   const [MobileNav, setMobileNav] = useState("hidden");
   return (
     <>
       <nav className=" z-50 flex relative bg-white-800 text-black px-8 py-4 items-center justify-between">
         <div className="flex items-center gap-6">
           <img className="h-10 border border-black" src={logo} alt="logo" />
-          <h1 className="text-2xl font-semibold">Rental System</h1>
+          <h1 className="text-2xl font-semibold">KrishiSahay</h1>
         </div>
         <div className="nav-links-rental-ss block md:flex items-center gap-4">
           <div className=" hidden md:flex gap-4">
@@ -43,12 +50,16 @@ const Navbar = () => {
             ))}
           </div>
           <div className="hidden md:flex  gap-4">
+            <Link to="Login">
             <button className="px-2 py-1 border border-orange-500 rounded hover:bg-orange-500 hover:text-white transition-all duration-300">
               Log in
             </button>
+            </Link>
+            <Link to="/SignUp">
             <button className="px-2 py-1 bg-orange-500 border border-orange-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300">
               Sign up
             </button>
+            </Link>
           </div>
           <button
             className="text-zinc-800 text-4xl hover:text-orange-500  md:hidden"
@@ -79,16 +90,20 @@ const Navbar = () => {
             {items.title}{" "}
           </Link>
         ))}
+        <Link to="/Login">
         <button
           className={` ${MobileNav} px-2 mb-3 py-1 border border-orange-500 rounded hover:bg-orange-500 hover:text-white transition-all duration-300 `}
         >
           Log in
         </button>
+        </Link>
+        <Link to="/SignUp">
         <button
           className={` ${MobileNav} px-2  mb-3 py-1 bg-orange-500 border border-orange-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 `}
         >
           Sign up
         </button>
+        </Link>
       </div>
     </>
   );
