@@ -11,7 +11,7 @@ const Navbar = () => {
     },
     {
       title: "All Equipments",
-      link: "/all-equipments",
+      link: "/AllEquipments",
     },
     {
       title: "Cart",
