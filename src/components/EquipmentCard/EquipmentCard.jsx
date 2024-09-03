@@ -5,7 +5,7 @@ const EquipmentCard = ({data}) => {
   return (
     <>
     <Link to={`/view-equipment-details/${data._id}`}>
-    <div className='bg-zinc-300 rounded p-4 flex flex-col'>
+    <div className='bg-orange-100 rounded p-4 flex flex-col'>
         <div className='bg-white rounded h-[250px] flex items-center justify-center'>
             <img src={data.url} alt='/' className='w-full object-cover h-full'/>
         </div>

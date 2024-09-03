@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [Values, setValues]=useState({username:"",password:""});
+    const [Values, setValues]=useState({email:"",password:""});
     const navigate= useNavigate();
     const change =(e)=>{
         const {name, value}= e.target;
@@ -12,11 +12,11 @@ const Login = () => {
     }
     const submit = async () => {
         try {
-            if (Values.username === "" || Values.password === "") {
+            if (Values.email === "" || Values.password === "") {
                 alert("All fields are required");
             } else {
-                console.log(Values);
                 const response = await axios.post("http://localhost:1000/api/v1/sign-in", Values);
+                console.log(response);
                 localStorage.setItem("id",response.data._id);
                 localStorage.setItem("token",response.data.token);
                 localStorage.setItem("role",response.data.role);
@@ -38,8 +38,8 @@ const Login = () => {
         LogIn</p>
     <div className=' mt-4'>
         <div>
-            <label htmlFor='' className='text-zinc-700'>Username</label> 
-            <input type="text" className='w-full mt-2  text-white  bg-zinc-700 p-2 outline-none' placeholder='username' value={Values.username} onChange={change} name="username" required></input>
+            <label htmlFor='' className='text-zinc-700'>Email</label> 
+            <input type="email" className='w-full mt-2  text-white  bg-zinc-700 p-2 outline-none' placeholder='Email' value={Values.email} onChange={change} name="email" required></input>
         </div>
        
         <div className='mt-4'>
