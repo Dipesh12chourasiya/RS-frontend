@@ -10,7 +10,7 @@ const EquipmentCard = ({data}) => {
             <img src={data.url} alt='/' className='w-full object-cover h-full'/>
         </div>
         <h2 className='mt-4 text-zinc-800 text-xl font-semibold'>{data.title}</h2>
-        <p className='mt-2 text-zinc-500 font-semibold'>by {data.owner}</p>
+        <p className='mt-2 text-zinc-500 font-semibold'>{data.desc.substring(0,100)}...</p>
         <p className='mt-2 text-orange-600 font-semibold text-xl'>₹ {data.price}/-</p>
     </div>
     </Link>

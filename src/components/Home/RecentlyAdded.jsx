@@ -16,9 +16,9 @@ const RecentlyAdded = () => {
   
   return (
     <div className=' py-8 px-4 bg-white'> 
-    <h4 className='text-3xl text-orange-500'>Recently Availabe equipments</h4>
-    {!Data && <div className='flex items-center justify-center my-8'><Loader /></div> }
-    <div className=' my-4 sm:grid-cols-3 grid grid-cols-1 md:grid-cols-4   gap-4'>
+    <h4 className='text-[50px] font-semibold text-orange-500 py-4 '>Recently Availabe equipments</h4>
+    {!Data && <div className='flex items-center justify-center my-12'><Loader /></div> }
+    <div className=' my-4 sm:grid-cols-3 grid grid-cols-1 md:grid-cols-4   gap-8'>
 
       {Data && Data.map((items,i)=>(<div key={i}><EquipmentCard data={items}/>{" "}</div>))}
     </div>

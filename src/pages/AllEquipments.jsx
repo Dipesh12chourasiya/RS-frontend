@@ -15,7 +15,7 @@ const AllEquipments = () => {
         },[]);  
   return (
     <div className='bg-white px-4 py-8' >{" "}
-         <h4 className='text-3xl text-orange-500'>All equipments</h4>
+         <h4 className='text-[50px] font-semibold text-orange-500 py-2 '>All equipments</h4>
     {!Data && <div className='flex items-center justify-center my-8'><Loader /></div> }
     <div className=' my-4 sm:grid-cols-3 grid grid-cols-1 md:grid-cols-4   gap-9'>
 
