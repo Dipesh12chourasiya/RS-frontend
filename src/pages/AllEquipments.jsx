@@ -20,7 +20,7 @@ const AllEquipments = () => {
     <div className=' my-4 sm:grid-cols-3 grid grid-cols-1 md:grid-cols-4   gap-9'>
 
       {Data && Data.map((items,i)=>(<div key={i}><EquipmentCard data={items}/>{" "}</div>))}
-      {console.log(Data)}
+      {/* {console.log(Data)} */}
     </div>
     </div>
   )

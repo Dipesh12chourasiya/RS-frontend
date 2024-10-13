@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ data }) => {
+  // {console.log(data)}
   return (
-    <div className="bg-zinc-400 py-4 rounded flex flex-col items-center justify-between h-[100%]">
+    <div className="bg-zinc-400 py-4 rounded flex flex-col items-center justify-between h-auto lg:h-[100%]">
       <div className="flex items-center flex-col justify-center">
         <img src={data.avatar} className="h-[12vh]" alt="img" />
         <p className="mt-3 text-xl font-semibold">{data.username}</p>
