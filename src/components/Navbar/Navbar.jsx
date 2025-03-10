@@ -25,13 +25,26 @@ const Navbar = () => {
       title: "Profile",
       link: "/profile",
     },
+    {
+      title: "Admin Profile",
+      link: "/profile",
+    },
   ];
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   // Remove "Cart" and "Profile" links if user is not logged in
-  if (!isLoggedIn) {
+  const role = useSelector((state) => state.auth.role);
+  if (!isLoggedIn) { // if it is false
     links.splice(2, 2);
+  }
+
+  if(isLoggedIn == true && role === "user"){
+    links.splice(4, 1);
+  }
+
+  if(isLoggedIn == true && role === "admin"){
+    links.splice(3, 1);
   }
 
   const LogoutFN = () => {
@@ -57,7 +70,7 @@ const Navbar = () => {
                 <Link
                   to={items.link}
                   className={`hover:text-orange-500 transition-all duration-300 cursor-pointer ${
-                    items.title === "Profile"
+                    (items.title === "Profile" || items.title === "Admin Profile")
                       ? "border border-orange-700 rounded-md px-2 py-[2px]"
                       : ""
                   }`}
