@@ -20,61 +20,69 @@ const Sidebar = ({ data }) => {
     navigate("/");
   };
 
-  // {console.log(data)}
   return (
-    <div className="bg-zinc-400 py-4 rounded flex flex-col items-center justify-between h-auto lg:h-[100%]">
-      <div className="flex items-center flex-col justify-center">
-        <img src={data.avatar} className="h-[12vh]" alt="img" />
-        <p className="mt-3 text-xl font-semibold">{data.username}</p>
-        <p className="mt-1 text-sm">{data.email}</p>
-        <p className="mt-1 text-sm">{data.phoneNumber}</p>
-        <p className="mt-1 text-sm">{data.address}</p>
-        <div className="w-full mt-4 h-[1px] bg-zinc-500 hidden lg:block"></div>
+    <div className="bg-white shadow-xl rounded-2xl p-6 flex flex-col items-center justify-between h-auto lg:h-full border border-lime-200">
+      {/* Profile Section */}
+      <div className="flex flex-col items-center">
+        <img
+          src={data.avatar}
+          className="h-24 w-24 rounded-full border-4 border-lime-500 shadow-md"
+          alt="profile"
+        />
+        <p className="mt-3 text-xl font-bold text-gray-800">{data.username}</p>
+        <p className="mt-1 text-sm text-gray-600">{data.email}</p>
+        <p className="mt-1 text-sm text-gray-600">{data.phoneNumber}</p>
+        <p className="mt-1 text-sm text-gray-600">{data.address}</p>
+
+        <div className="w-full mt-4 h-[1px] bg-lime-200 hidden lg:block"></div>
       </div>
 
+      {/* User Menu */}
       {role === "user" && (
-        <div className="w-full flex-col items-center justify-center hidden lg:flex">
+        <div className="w-full flex-col items-center justify-center hidden lg:flex mt-6">
           <Link
             to="/profile"
-            className="font-semibold w-full py-2 text-center hover:bg-zinc-500 rounded transition-all"
+            className="font-medium w-full py-2 text-center text-gray-700 rounded hover:bg-lime-100 hover:text-lime-700 transition-all"
           >
             Favourites
           </Link>
           <Link
             to="/profile/orderHistory"
-            className="font-semibold w-full py-2 mt-4 text-center hover:bg-zinc-500 rounded transition-all"
+            className="font-medium w-full py-2 mt-3 text-center text-gray-700 rounded hover:bg-lime-100 hover:text-lime-700 transition-all"
           >
             Order History
           </Link>
           <Link
             to="/profile/settings"
-            className="font-semibold w-full py-2 mt-4 text-center hover:bg-zinc-500 rounded transition-all"
+            className="font-medium w-full py-2 mt-3 text-center text-gray-700 rounded hover:bg-lime-100 hover:text-lime-700 transition-all"
           >
             Settings
           </Link>
         </div>
       )}
 
+      {/* Admin Menu */}
       {role === "admin" && (
-        <div className="w-full flex-col items-center justify-center hidden lg:flex">
-        <Link
-          to="/profile"
-          className="font-semibold w-full py-2 text-center hover:bg-zinc-500 rounded transition-all"
-        >
-          All Orders
-        </Link>
-        <Link
+        <div className="w-full flex-col items-center justify-center hidden lg:flex mt-6">
+          <Link
+            to="/profile"
+            className="font-medium w-full py-2 text-center text-gray-700 rounded hover:bg-lime-100 hover:text-lime-700 transition-all"
+          >
+            All Orders
+          </Link>
+          <Link
             to="/profile/addEqp"
-            className="font-semibold w-full py-2 mt-4 text-center hover:bg-zinc-500 rounded transition-all"
+            className="font-medium w-full py-2 mt-3 text-center text-gray-700 rounded hover:bg-lime-100 hover:text-lime-700 transition-all"
           >
             Add Equipment
           </Link>
-      </div>
+        </div>
       )}
 
+      {/* Logout Button */}
       <button
         onClick={logout}
-        className=" p-2 w-3/6 lg:w-full mt-4 lg:mt-0 font-semibold flex items-center justify-center rounded bg-zinc-700 text-white hover:bg-zinc-900"
+        className="mt-6 w-3/6 lg:w-full py-2 font-semibold rounded-xl bg-lime-600 text-white shadow-md hover:bg-lime-700 transition-all"
       >
         Log Out
       </button>

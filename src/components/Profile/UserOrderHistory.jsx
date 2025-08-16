@@ -4,7 +4,7 @@ import Loader from "../Loader/Loader";
 import { Link } from "react-router-dom";
 
 const UserOrderHistory = () => {
-  const [OrderHistory, setOrderHistory] = useState();
+  const [OrderHistory, setOrderHistory] = useState(null);
 
   const headers = {
     id: localStorage.getItem("id"),
@@ -13,97 +13,121 @@ const UserOrderHistory = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const response = await axios.get(
-        "http://localhost:1000/api/v1/get-order-history",
-        { headers }
-      );
-      setOrderHistory(response.data.data);
+      try {
+        const response = await axios.get(
+          "http://localhost:1000/api/v1/get-order-history",
+          { headers }
+        );
+        setOrderHistory(response.data.data);
+      } catch (error) {
+        console.error("Error fetching order history:", error);
+      }
     };
     fetch();
   }, []);
 
   return (
-    <>
-    {/* {console.log(OrderHistory)} */}
+    <div className="min-h-screen bg-white p-6">
+      {/* Loader */}
       {!OrderHistory && (
         <div className="flex items-center justify-center h-screen">
           <Loader />
         </div>
       )}
+
+      {/* No Orders */}
       {OrderHistory && OrderHistory.length === 0 && (
-        <div className="h-[80vh] p-4 text-zinc-100">
-          <div className="h-[100%] flex flex-col items-center justify-center">
-            <h1 className="text-5xl font-semibold text-zinc-500 mb-8">
-              No Order History
-            </h1>
-            <img
-              className="h-[20vh] mb-8"
-              src="https://cdn-icons-png.flaticon.com/128/9961/9961218.png"
-              alt="img"
-            />
-          </div>
+        <div className="h-[80vh] flex flex-col items-center justify-center text-lime-800">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            No Order History
+          </h1>
+          <img
+            className="h-[20vh] mb-6"
+            src="https://cdn-icons-png.flaticon.com/128/2909/2909767.png"
+            alt="no-orders"
+          />
+          <p className="text-lg text-lime-700">Start renting farming equipment now!</p>
         </div>
       )}
+
+      {/* Orders */}
       {OrderHistory?.length > 0 && (
-        <div className="h-[100%] p-0 md:p-4 text-zinc-100">
-          <h1 className="text-3xl md:text-5xl font-semibold text-zinc-500 mb-8">
-            Your Order History
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold text-lime-800 mb-8 text-center">
+            Order History 🌱
           </h1>
-          <div className="mt-4 bg-zinc-800 w-full rounded py-2 px-4 flex gap-2">
-            <div className="w-[3%]">
-              <h1 className="text-center">Sr.</h1>
-            </div>
-            <div className="w-[22%]">
-              <h1>Equipments</h1>
-            </div>
-            <div className="w-[45%]">
-              <h1 className="">Description</h1>
-            </div>
-            <div className="w-[9%]">
-              <h1>Price</h1>
-            </div>
-            <div className="w-[16%]">
-              <h1>Status</h1>
-            </div>
-            <div className="w-none md:w-[5%] hidden md:block">
-              <h1>Mode</h1>
-            </div>
+
+          {/* Table Header */}
+          <div className="grid grid-cols-12 bg-lime-600 text-white font-semibold rounded-lg shadow-md py-3 px-4 mb-2">
+            <div className="col-span-1 text-center">Sr.</div>
+            <div className="col-span-3">Equipment</div>
+            <div className="col-span-4">Description</div>
+            <div className="col-span-1 text-center">Price</div>
+            <div className="col-span-2 text-center">Status</div>
+            <div className="col-span-1 hidden md:block text-center">Mode</div>
           </div>
 
-            {OrderHistory.map((items, i) => (
-            <div key={items.equipment_id} className="bg-zinc-800 w-full rounded py-2 px-4 flex gap-4 hover:bg-zinc-900 hover:cursor-pointer">
-                  <div className="w-[3%]">
-                    <h1 className="text-center">{i + 1}</h1>
-                  </div>
-                  <div className="w-[22%]">
-                    <Link to={`/view-equipment-details/${items.equipment._id}`} className="hover:text-blue-300 text-white" >
-                    {items.equipment.title}</Link>
-                  </div>
-                  <div className="w-[45%]">
-                    <h1 className="">{items.equipment.desc.slice(0,50)}...</h1>
-                  </div>
-                  <div className="w-[9%]">
-                    <h1>{items.equipment.price}</h1>
-                  </div>
-                  <div className="w-[16%]">
-                      <h1 className="font-serif text-green-500">
-                        {items.status == "Order Placed" ? (
-                          <div className="text-yellow-500">{items.status}</div>
-                        ) : items.status === "Canceled" ? (
-                          <div className="text-red-500">{items.status}</div>
-                        ) : (
-                          items.status
-                        )}
-                      </h1>
-                  </div>
-                  <div className="w-none md:w-[5%] hidden md:block">
-                    <h1 className="text-sm text-zinc-400">COD</h1>
-                  </div>
-            </div>
-          ))}
+          {/* Order Rows */}
+          {OrderHistory.map((items, i) => {
+            const equipment = items?.equipment;
+
+            return (
+              <div
+                key={equipment?._id || i}
+                className="grid grid-cols-12 bg-white rounded-lg shadow hover:shadow-lg transition-all py-3 px-4 mb-3 items-center border border-lime-200"
+              >
+                <div className="col-span-1 text-center font-medium text-lime-700">
+                  {i + 1}
+                </div>
+
+                <div className="col-span-3">
+                  {equipment ? (
+                    <Link
+                      to={`/view-equipment-details/${equipment._id}`}
+                      className="text-lime-700 hover:text-lime-600 font-semibold"
+                    >
+                      {equipment.title}
+                    </Link>
+                  ) : (
+                    <span className="text-red-500">Equipment not found</span>
+                  )}
+                </div>
+
+                <div className="col-span-4 text-gray-700">
+                  {equipment
+                    ? equipment.desc?.slice(0, 50) + "..."
+                    : "No description available"}
+                </div>
+
+                <div className="col-span-1 text-center font-bold text-lime-700">
+                  {equipment ? `₹${equipment.price}` : "-"}
+                </div>
+
+                <div className="col-span-2 text-center">
+                  {items.status === "Order Placed" ? (
+                    <span className="px-3 py-1 bg-yellow-200 text-yellow-700 rounded-full text-sm font-medium">
+                      {items.status}
+                    </span>
+                  ) : items.status === "Canceled" ? (
+                    <span className="px-3 py-1 bg-red-200 text-red-700 rounded-full text-sm font-medium">
+                      {items.status}
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 bg-green-200 text-green-700 rounded-full text-sm font-medium">
+                      {items.status}
+                    </span>
+                  )}
+                </div>
+
+                <div className="col-span-1 hidden md:block text-center text-sm text-green-600">
+                  COD
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

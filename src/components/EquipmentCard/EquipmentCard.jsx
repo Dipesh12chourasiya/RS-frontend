@@ -15,39 +15,40 @@ const EquipmentCard = ({ data, favourite }) => {
       { headers }
     );
     alert(response.data.message);
-    
   };
 
   return (
     <div
       key={data._id}
-      className="flex flex-col justify-center bg-orange-100 rounded p-4"
+      className="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
     >
       <Link to={`/view-equipment-details/${data._id}`}>
-        <div className="bg-orange-100 rounded p-4 flex flex-col">
-          <div className="bg-white rounded h-[250px] flex items-center justify-center">
+        <div className="flex flex-col">
+          <div className="relative h-[250px] overflow-hidden">
             <img
               src={data.url}
-              alt="/"
-              className="w-full object-cover h-full"
+              alt={data.title}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
-          <h2 className="mt-4 text-zinc-800 text-xl font-semibold">
-            {data.title}
-          </h2>
-          <p className="mt-2 text-zinc-500 font-semibold">
-            {data.desc.substring(0, 100)}...
-          </p>
-          <p className="mt-2 text-orange-600 font-semibold text-xl">
-            ₹ {data.price}/-
-          </p>
+          <div className="p-4">
+            <h2 className="line-clamp-2 text-xl font-bold text-slate-800 transition-colors duration-300 group-hover:text-lime-700">
+              {data.title}
+            </h2>
+            <p className="line-clamp-3 mt-2 text-sm text-slate-500">
+              {data.desc.substring(0, 100)}...
+            </p>
+            <p className="mt-4 text-xl font-bold text-lime-600">
+              ₹ {data.price}/-
+            </p>
+          </div>
         </div>
       </Link>
 
       {favourite && (
         <button
           onClick={handleRemoveFav}
-          className="bg-yellow-100 text-sm font-bold px-4 py-2 rounded border border-yellow-500"
+          className="mt-2 w-full rounded-md border border-red-500 py-2 text-sm font-semibold text-red-500 transition-colors duration-300 hover:bg-red-500 hover:text-white"
         >
           Remove from Favorites
         </button>

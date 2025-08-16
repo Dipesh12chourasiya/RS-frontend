@@ -16,7 +16,7 @@ const RecentlyAdded = () => {
   
   return (
     <div className=' py-8 px-4 bg-white'> 
-    <h4 className= 'text-[35px] md:text-[50px] font-semibold text-orange-500 py-4 '>Recently Availabe equipments</h4>
+    <h4 className= 'text-[35px] md:text-[50px] font-semibold text-lime-700 py-4 '>Recently Availabe equipments</h4>
     {!Data && <div className='flex items-center justify-center my-12'><Loader /></div> }
     <div className=' my-4 sm:grid-cols-3 grid grid-cols-1 md:grid-cols-4   gap-8'>
 

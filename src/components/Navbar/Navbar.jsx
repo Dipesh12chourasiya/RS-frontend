@@ -1,51 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/editedLogo.png";
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoClose } from "react-icons/io5"; // Import IoClose for a better mobile UX
 import { useSelector, useDispatch } from "react-redux";
-import { authActions } from "../../store/auth";  // Assuming you have auth actions defined here
+import { authActions } from "../../store/auth";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-
-  const links = [
-    {
-      title: "Home",
-      link: "/",
-    },
-    {
-      title: "All Equipments",
-      link: "/AllEquipments",
-    },
-    {
-      title: "Cart",
-      link: "/cart",
-    },
-    {
-      title: "Profile",
-      link: "/profile",
-    },
-    {
-      title: "Admin Profile",
-      link: "/profile",
-    },
-  ];
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // Remove "Cart" and "Profile" links if user is not logged in
   const role = useSelector((state) => state.auth.role);
-  if (!isLoggedIn) { // if it is false
-    links.splice(2, 2);
-  }
-
-  if(isLoggedIn == true && role === "user"){
-    links.splice(4, 1);
-  }
-
-  if(isLoggedIn == true && role === "admin"){
-    links.splice(3, 1);
-  }
 
   const LogoutFN = () => {
     dispatch(authActions.logout());
@@ -53,27 +16,49 @@ const Navbar = () => {
 
   const [MobileNav, setMobileNav] = useState("hidden");
 
+  // Links rendering based on state
+  const getLinks = () => {
+    let baseLinks = [
+      { title: "Home", link: "/" },
+      { title: "All Equipments", link: "/AllEquipments" },
+    ];
+
+    if (isLoggedIn) {
+      baseLinks.push({ title: "Cart", link: "/cart" });
+
+      if (role === "user") {
+        baseLinks.push({ title: "Profile", link: "/profile" });
+      } else if (role === "admin") {
+        baseLinks.push({ title: "Admin Profile", link: "/profile" });
+      }
+    }
+
+    return baseLinks;
+  };
+
+  const links = getLinks();
+
   return (
     <>
-      <nav className="z-50 flex relative bg-white-800 text-black px-8 py-4 items-center justify-between">
-        {/* Logo and Name */}
-        <div className="flex items-center gap-6">
-          <img className="h-10 border border-black" src={logo} alt="logo" />
-          <h1 className="text-2xl font-semibold">KrishiSahay</h1>
+      <nav className="z-50 flex sticky top-0 bg-white/95 backdrop-blur-sm px-8 py-4 items-center justify-between shadow-md">
+        {/* Logo */}
+        <div className="flex items-center gap-4">
+          <img className="h-10 rounded-full" src={logo} alt="KrishiSahay Logo" />
+          <h1 className="text-2xl font-bold text-lime-700">KrishiSahay</h1>
         </div>
 
-        {/* Links for desktop view */}
-        <div className="nav-links-rental-ss block md:flex items-center gap-4">
-          <div className="hidden md:flex gap-4">
+        {/* Desktop Links */}
+        <div className="nav-links-rental-ss hidden md:flex items-center gap-6">
+          <div className="flex items-center gap-6">
             {links.map((items, i) => (
               <div className="flex items-center" key={i}>
                 <Link
                   to={items.link}
-                  className={`hover:text-orange-500 transition-all duration-300 cursor-pointer ${
-                    (items.title === "Profile" || items.title === "Admin Profile")
-                      ? "border border-orange-700 rounded-md px-2 py-[2px]"
-                      : ""
-                  }`}
+                  className={`font-medium transition-all duration-300 hover:text-lime-700
+                    ${(items.title === "Profile" || items.title === "Admin Profile")
+                      ? "border-2 border-lime-600 rounded-full px-4 py-1 text-lime-600 hover:bg-lime-600 hover:text-white"
+                      : "text-slate-800"
+                    }`}
                 >
                   {items.title}
                 </Link>
@@ -81,45 +66,49 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Login and Signup buttons for desktop view */}
-          <div className="hidden md:flex gap-4">
-            {!isLoggedIn && (
+          {/* Login/Signup (only if logged out) */}
+          <div className="flex gap-4">
+            {!isLoggedIn ? (
               <>
                 <Link to="/Login">
-                  <button className="px-2 py-1 border border-orange-500 rounded hover:bg-orange-500 hover:text-white transition-all duration-300">
+                  <button className="px-4 py-2 text-sm font-semibold border-2 border-lime-600 rounded-lg text-lime-600 transition-all duration-300 hover:bg-lime-600 hover:text-white">
                     Log in
                   </button>
                 </Link>
                 <Link to="/SignUp">
-                  <button className="px-2 py-1 bg-orange-500 border border-orange-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300">
+                  <button className="px-4 py-2 text-sm font-semibold bg-lime-600 border-2 border-lime-600 rounded-lg text-white transition-all duration-300 hover:bg-lime-700">
                     Sign up
                   </button>
                 </Link>
               </>
+            ) : (
+              <button
+                onClick={LogoutFN}
+                className="px-4 py-2 text-sm font-semibold border-2 border-red-500 text-red-500 rounded-lg transition-all duration-300 hover:bg-red-500 hover:text-white"
+              >
+                Logout
+              </button>
             )}
-            
           </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="text-zinc-800 text-4xl hover:text-orange-500 md:hidden"
-            onClick={() =>
-              MobileNav === "hidden" ? setMobileNav("block") : setMobileNav("hidden")
-            }
-          >
-            <IoMenu />
-          </button>
         </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          className="text-3xl text-slate-700 hover:text-lime-600 md:hidden"
+          onClick={() => setMobileNav(MobileNav === "hidden" ? "block" : "hidden")}
+        >
+          {MobileNav === "hidden" ? <IoMenu /> : <IoClose />}
+        </button>
       </nav>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile Nav */}
       <div
-        className={`${MobileNav} bg-white h-400 absolute top-100 right-0 w-full z-40 flex flex-col items-center justify-center`}
+        className={`${MobileNav} fixed top-16 right-0 w-full z-40 bg-white/95 backdrop-blur-md shadow-lg py-8 flex flex-col items-center justify-center gap-6 md:hidden`}
       >
         {links.map((items, i) => (
           <Link
             to={items.link}
-            className={`hover:text-orange-500 font-semibold transition-all duration-300 cursor-pointer mb-3`}
+            className="text-xl font-medium text-slate-800 hover:text-lime-700 transition-all duration-300 mb-3"
             key={i}
             onClick={() => setMobileNav("hidden")}
           >
@@ -127,22 +116,30 @@ const Navbar = () => {
           </Link>
         ))}
 
-        {/* Login and Signup buttons for mobile view */}
-        {!isLoggedIn && (
+        {!isLoggedIn ? (
           <>
-            <Link to="/Login">
-              <button className="px-2 mb-3 py-1 border border-orange-500 rounded hover:bg-orange-500 hover:text-white transition-all duration-300">
+            <Link to="/Login" onClick={() => setMobileNav("hidden")}>
+              <button className="px-6 py-3 font-semibold border-2 border-lime-600 rounded-lg text-lime-600 transition-all duration-300 hover:bg-lime-600 hover:text-white">
                 Log in
               </button>
             </Link>
-            <Link to="/SignUp">
-              <button className="px-2 mb-3 py-1 bg-orange-500 border border-orange-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300">
+            <Link to="/SignUp" onClick={() => setMobileNav("hidden")}>
+              <button className="px-6 py-3 font-semibold bg-lime-600 border-2 border-lime-600 rounded-lg text-white transition-all duration-300 hover:bg-lime-700">
                 Sign up
               </button>
             </Link>
           </>
+        ) : (
+          <button
+            onClick={() => {
+              LogoutFN();
+              setMobileNav("hidden");
+            }}
+            className="px-6 py-3 font-semibold border-2 border-red-500 text-red-500 rounded-lg transition-all duration-300 hover:bg-red-500 hover:text-white"
+          >
+            Logout
+          </button>
         )}
-        
       </div>
     </>
   );

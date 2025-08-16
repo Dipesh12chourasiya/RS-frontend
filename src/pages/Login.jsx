@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { authActions } from "../store/auth";
 import { useDispatch } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [Values, setValues] = useState({ email: "", password: "" });
@@ -16,7 +17,17 @@ const Login = () => {
     setValues({ ...Values, [name]: value });
   };
 
-  const submit = async () => {
+  // New state to manage password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const submit = async (e) => {
+    e.preventDefault(); // stop form reload
+
     try {
       if (Values.email === "" || Values.password === "") {
         alert("All fields are required");
@@ -25,83 +36,98 @@ const Login = () => {
           "http://localhost:1000/api/v1/sign-in",
           Values
         );
-        // console.log(response);
+
         if (response) {
           dispatch(authActions.login());
           dispatch(authActions.changeRole(response.data.role));
           localStorage.setItem("id", response.data.id);
-
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("role", response.data.role);
-          navigate("/");
+
+          navigate("/"); // redirect after login
         } else {
           navigate("/login");
         }
-
-        // Assuming the response contains a success message
-        // console.log(response.data);
-
-        // Navigate to another page, e.g., Home page after successful login
-        // navigate("/profile");
       }
     } catch (error) {
-      alert(error.response.data.message);
+      alert(error.response?.data?.message || "Login failed. Try again.");
     }
   };
 
   return (
-    <div className="h-[84vh] bg-white px-12 py-8 items-center justify-center flex">
-      <div className="bg-zinc-300 rounded-lg px-8 py-5 w-full md:w-3/6 lg:w-2/6">
-        <p className="text-zinc-800 flex items-center justify-center text-xl">
-          LogIn
-        </p>
-        <div className=" mt-4">
-          <div>
-            <label htmlFor="" className="text-zinc-700">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full mt-2  text-white  bg-zinc-700 p-2 outline-none"
-              placeholder="Email"
-              value={Values.email}
-              onChange={change}
-              name="email"
-              required
-            ></input>
-          </div>
+    <div className="flex h-screen items-center justify-center bg-slate-100">
+      <div className="w-full rounded-lg bg-white p-8 shadow-lg md:w-3/6 lg:w-2/6">
+        <h2 className="mb-6 text-center text-3xl font-semibold text-slate-800">
+          Log In
+        </h2>
+        <form>
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="mt-1 block w-full rounded-md border border-slate-300 p-2 text-slate-800 shadow-sm focus:border-lime-500 focus:ring-lime-500"
+                placeholder="Email"
+                value={Values.email}
+                onChange={change}
+                required
+              />
+            </div>
 
-          <div className="mt-4">
-            <label htmlFor="" className="text-zinc-700">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full   text-white mt-2 bg-zinc-700 p-2 outline-none"
-              value={Values.password}
-              onChange={change}
-              name="password"
-              required
-            ></input>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-slate-700"
+              >
+                Password
+              </label>
+              <div className="relative mt-1">
+                <input
+                  // Use a conditional expression to change the input type
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  className="block w-full rounded-md border border-slate-300 p-2 pr-10 text-slate-800 shadow-sm focus:border-lime-500 focus:ring-lime-500"
+                  value={Values.password}
+                  placeholder="Password"
+                  onChange={change}
+                  required
+                />
+                <div
+                  className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3 text-slate-400 hover:text-slate-600"
+                  onClick={togglePasswordVisibility}
+                >
+                  {/* Conditionally render the correct icon */}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </div>
+              </div>
+            </div>
           </div>
-
           <div className="mt-8">
             <button
-              className="w-full  text-white bg-orange-500 font-semibold py-2 hover:text-orange-500 hover:bg-white transition-all duration-300 cursor-pointer"
+              type="submit"
+              className="w-full rounded-md bg-lime-600 py-3 text-lg font-semibold text-white transition duration-300 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2"
               onClick={submit}
             >
-              LogIn
+              Log In
             </button>
           </div>
-          <p className="flex mt-4  items-center justify-center text-zinc-500 font-semibold">
-            or
-          </p>
-          <p className="flex mt-4 items-center justify-center text-zinc-500 font-semibold">
-            Don't have an account? &nbsp;
-            <Link to="/SignUp" className="hover:text-orange-500">
-              <u>SignUp</u>
-            </Link>
-          </p>
+        </form>
+        <div className="mt-6 text-center text-sm">
+          <span className="text-slate-500">Don't have an account? </span>
+          <Link
+            to="/SignUp"
+            className="font-semibold text-lime-600 hover:underline"
+          >
+            Sign Up
+          </Link>
         </div>
       </div>
     </div>
