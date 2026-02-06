@@ -18,6 +18,8 @@ import Settings from "./components/Profile/Settings";
 import Cart from "./pages/Cart";
 import AllOrders from "./pages/AllOrders";
 import AddEquipments from "./pages/AddEquipments";
+import AdminOrders from "./components/Profile/AdminOrders";
+import AdminUserDetails from "./components/Profile/AdminUserDetails";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,23 +43,23 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route path="/AllEquipments" element={<AllEquipments />} />
         <Route path="/cart" element={<Cart />} />
-        
-        <Route path="/profile" element={<Profile />}>
-        
-          {role === "user" ? (
-            <Route index element={<Favourites />} />
-          ) : (
-            <Route index element={<AllOrders />} />
-          )}
 
-          {
-            role === "admin" &&  <Route path="/profile//addEqp" element={<AddEquipments />} />
-          }
-          
-          <Route path="/profile//orderHistory" element={<UserOrderHistory />} />
-          <Route path="/profile//settings" element={<Settings />} />
+        <Route path="/profile" element={<Profile />}>
+          {/* Default page */}
+          <Route
+            index
+            element={role === "admin" ? <AdminOrders /> : <Favourites />}
+          />
+
+          {/* USER ROUTES */}
+          <Route path="orderHistory" element={<UserOrderHistory />} />
+          <Route path="settings" element={<Settings />} />
+
+          {/* ADMIN ROUTES */}
+          <Route path="addEqp" element={<AddEquipments />} />
+          <Route path="users/:id" element={<AdminUserDetails />} />
         </Route>
-        
+
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/Login" element={<Login />}></Route>
         <Route
@@ -73,5 +75,3 @@ function App() {
 }
 
 export default App;
-
-// we have completed till video 14
